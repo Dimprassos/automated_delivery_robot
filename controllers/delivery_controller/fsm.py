@@ -1,0 +1,11 @@
+from enum import Enum
+
+
+class RobotState(Enum):
+    IDLE = "IDLE"
+    GO_TO_DESTINATION = "GO_TO_DESTINATION"
+    AVOID_OBSTACLE = "AVOID_OBSTACLE"
+    DELIVER = "DELIVER"
+    RETURN_TO_BASE = "RETURN_TO_BASE"
+    FINISHED = "FINISHED"
+    ERROR = "ERROR"
