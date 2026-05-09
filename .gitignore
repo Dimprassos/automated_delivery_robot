@@ -21,3 +21,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Webots project temporary files
+*.wbproj
+.*.wbproj
+worlds/*.wbproj
+worlds/.*.wbproj
