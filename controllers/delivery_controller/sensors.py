@@ -2,10 +2,9 @@ class SensorController:
     def __init__(self, robot, timestep):
         self.robot = robot
         self.timestep = timestep
-
         self.distance_sensors = []
 
-        # e-puck proximity sensors: ps0 έως ps7
+        # e-puck proximity sensors: ps0 to ps7.
         for i in range(8):
             sensor_name = f"ps{i}"
 
@@ -25,9 +24,7 @@ class SensorController:
         if len(values) < 8:
             return []
 
-        # Μπροστινοί αισθητήρες του e-puck
-        # ps0, ps1 = front/right
-        # ps6, ps7 = front/left
+        # ps0, ps1 = front/right; ps6, ps7 = front/left.
         return [values[0], values[1], values[6], values[7]]
 
     def max_front_value(self):

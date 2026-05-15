@@ -8,29 +8,23 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.029894867311495082 0.9833686717218385 0.17914338498659388 0.33628990792713265
-  position -1.7923159835629574 -0.3446523549908405 0.534829270476851
+  orientation 0.2943915853601192 -0.295857167634465 -0.908736557440311 5.16534364997155
+  position -2.1547483114665984 -2.2056114958117936 0.4076477032819801
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Floor {
-  size 20 20
+  size 5 4
 }
 E-puck {
-  hidden position_0_0 1388.051788696716
-  hidden position_0_1 1453.0425781129172
-  hidden linearVelocity_0 -0.040109971239007794 -0.04659881819899094 2.3025009487820073e-05
-  hidden angularVelocity_0 0.08000407337999389 -0.07032092232619373 0.0009471619913990452
-  hidden rotation_1 0 1 0 5.751021117206879
-  hidden linearVelocity_1 -0.04059854353733522 -0.04703019926790037 -9.782947735592708e-06
-  hidden angularVelocity_1 2.351945712947552 -2.0294727101292227 -0.004102092816391316
-  hidden rotation_2 0 -1 0 4.656413152746836
-  hidden linearVelocity_2 -0.040440218685750116 -0.047101725366601996 -5.057458305079968e-06
-  hidden angularVelocity_2 2.3546980663190453 -2.0262819924611932 0.0036960261581528205
-  translation -0.20116330918421524 -0.7035728822812506 -7.517131301420371e-05
-  rotation -0.00035388469765906816 -0.00026745709370724414 0.999999901616157 -2.282153232300913
+  hidden position_0_0 573.6061639221095
+  hidden position_0_1 582.9532745841087
+  hidden rotation_1 0 -1 0 4.446884338412412
+  hidden rotation_2 0 1 0 4.900226323586771
+  translation -1.86537 -1.59088 0.0194809
+  rotation 0.042332881365187196 -0.09452975838827184 -0.9946215621704447 2.07579
   controller "delivery_controller"
   controllerArgs [
     ""
@@ -39,8 +33,170 @@ E-puck {
 DirectionalLight {
   direction 0 -1 0
 }
-Solid {
-  translation 0.6 0 0.1
+DEF BASE_MARKER Solid {
+  translation -1.4 -0.9 0.006
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.7 0.25
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.28 0.28 0.012
+      }
+    }
+  ]
+  name "BASE"
+}
+DEF POINT_B_MARKER Solid {
+  translation -0.2 -0.9 0.006
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.9 0.55 0.1
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.3 0.3 0.012
+      }
+    }
+  ]
+  name "POINT_B"
+}
+DEF POINT_A_MARKER Solid {
+  translation 1.2 0.25 0.006
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.25 0.85
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.32 0.32 0.012
+      }
+    }
+  ]
+  name "POINT_A"
+}
+DEF HALL_SOUTH_WALL Solid {
+  translation -0.55 -1.3 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.32 0.32 0.35
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 2.4 0.08 0.18
+      }
+    }
+  ]
+  name "hall_south_wall"
+  boundingObject Box {
+    size 2.4 0.08 0.18
+  }
+}
+DEF HALL_NORTH_WALL_LEFT Solid {
+  translation -0.95 -0.5 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.32 0.32 0.35
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 1.55 0.08 0.18
+      }
+    }
+  ]
+  name "hall_north_wall_left"
+  boundingObject Box {
+    size 1.55 0.08 0.18
+  }
+}
+DEF VERTICAL_WEST_WALL Solid {
+  translation -0.22 0.05 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.32 0.32 0.35
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.08 1.1 0.18
+      }
+    }
+  ]
+  name "vertical_west_wall"
+  boundingObject Box {
+    size 0.08 1.1 0.18
+  }
+}
+DEF VERTICAL_EAST_WALL Solid {
+  translation 0.62 -0.2 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.32 0.32 0.35
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.08 1.25 0.18
+      }
+    }
+  ]
+  name "vertical_east_wall"
+  boundingObject Box {
+    size 0.08 1.25 0.18
+  }
+}
+DEF DELIVERY_SOUTH_WALL Solid {
+  translation 1.15 -0.15 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.32 0.32 0.35
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 1.1 0.08 0.18
+      }
+    }
+  ]
+  name "delivery_south_wall"
+  boundingObject Box {
+    size 1.1 0.08 0.18
+  }
+}
+DEF DELIVERY_NORTH_WALL Solid {
+  translation 0.75 0.65 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.32 0.32 0.35
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 1.9 0.08 0.18
+      }
+    }
+  ]
+  name "delivery_north_wall"
+  boundingObject Box {
+    size 1.9 0.08 0.18
+  }
+}
+DEF OBSTACLE_CORRIDOR Solid {
+  translation -0.65 -0.9 0.09
   children [
     Shape {
       appearance PBRAppearance {
@@ -49,12 +205,31 @@ Solid {
         metalness 0
       }
       geometry Box {
-        size 0.25 0.25 0.2
+        size 0.16 0.16 0.18
       }
     }
   ]
-  name "obstacle_box"
+  name "obstacle_corridor"
   boundingObject Box {
-    size 0.25 0.25 0.2
+    size 0.16 0.16 0.18
+  }
+}
+DEF OBSTACLE_TURN Solid {
+  translation 0.28 -0.22 0.09
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0.2 0.2
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.14 0.14 0.18
+      }
+    }
+  ]
+  name "obstacle_turn"
+  boundingObject Box {
+    size 0.14 0.14 0.18
   }
 }
