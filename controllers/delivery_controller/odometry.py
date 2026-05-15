@@ -24,6 +24,7 @@ class Odometry:
 
         self.left_sensor = self._get_position_sensor("left wheel sensor", timestep)
         self.right_sensor = self._get_position_sensor("right wheel sensor", timestep)
+        self.gps = self._get_gps_sensor("gps", timestep)
         self.last_left_position = None
         self.last_right_position = None
 
@@ -35,6 +36,28 @@ class Odometry:
         except Exception:
             print(f"Warning: position sensor {name} not found")
             return None
+
+    def _get_gps_sensor(self, name, timestep):
+        try:
+            sensor = self.robot.getDevice(name)
+            sensor.enable(timestep)
+            print("Localization: GPS-corrected wheel odometry")
+            return sensor
+        except Exception:
+            print("Localization: wheel odometry only")
+            return None
+
+    def _gps_xy(self, gps_values):
+        candidates = [
+            (gps_values[0], gps_values[1]),
+            (gps_values[0], gps_values[2]),
+            (-gps_values[2], gps_values[0]),
+        ]
+
+        return min(
+            candidates,
+            key=lambda candidate: math.hypot(candidate[0] - self.x, candidate[1] - self.y),
+        )
 
     def update(self, wheel_speeds):
         current_time = self.robot.getTime()
@@ -71,6 +94,12 @@ class Odometry:
         self.y += center_distance * math.sin(theta_mid)
         self.theta = normalize_angle(self.theta + theta_delta)
         self.path_length += abs(center_distance)
+
+        if self.gps is not None:
+            gps_values = self.gps.getValues()
+
+            if len(gps_values) >= 3 and all(math.isfinite(value) for value in gps_values):
+                self.x, self.y = self._gps_xy(gps_values)
 
         return self.pose()
 

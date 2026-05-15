@@ -1,59 +1,29 @@
-import math
-
-
 INITIAL_POSE = (-1.40, -0.90, 0.0)
 
 WAYPOINTS = {
     "BASE": (-1.40, -0.90),
+    "BYPASS_WEST": (-0.86, -1.02),
+    "BYPASS_EAST": (-0.44, -1.02),
     "POINT_B": (-0.20, -0.90),
-    "CORRIDOR_EAST": (0.20, -0.90),
-    "CORRIDOR_NORTH": (0.20, 0.25),
+    "CORRIDOR_EAST": (0.12, -0.90),
+    "CORRIDOR_NORTH": (0.12, 0.25),
     "POINT_A": (1.20, 0.25),
 }
 
 DEFAULT_DELIVERY_POINT = "POINT_A"
 OBSTACLE_AVOIDANCE_ENABLED = False
+DELIVERY_POINTS = ["POINT_A", "POINT_B"]
 
-DELIVERY_ROUTES = {
-    "POINT_A": [
-        "CORRIDOR_EAST",
-        "CORRIDOR_NORTH",
-        "POINT_A",
-    ],
-    "POINT_B": [
-        "POINT_B",
-    ],
-}
+NAV_GRAPH_EDGES = [
+    ("BASE", "BYPASS_WEST"),
+    ("BYPASS_WEST", "BYPASS_EAST"),
+    ("BYPASS_EAST", "POINT_B"),
+    ("POINT_B", "CORRIDOR_EAST"),
+    ("CORRIDOR_EAST", "CORRIDOR_NORTH"),
+    ("CORRIDOR_NORTH", "POINT_A"),
+]
 
-RETURN_ROUTES = {
-    "POINT_A": [
-        "CORRIDOR_NORTH",
-        "CORRIDOR_EAST",
-        "BASE",
-    ],
-    "POINT_B": [
-        "BASE",
-    ],
-}
-
-ARRIVAL_THRESHOLD = 0.18
-MISSION_TIMEOUT_SECONDS = 120.0
-
-
-def route_distance(route_names, start_name="BASE"):
-    total = 0.0
-    previous = WAYPOINTS[start_name]
-
-    for name in route_names:
-        current = WAYPOINTS[name]
-        total += math.hypot(current[0] - previous[0], current[1] - previous[1])
-        previous = current
-
-    return total
-
-
-def planned_route_distance(delivery_point):
-    return route_distance(DELIVERY_ROUTES[delivery_point]) + route_distance(
-        RETURN_ROUTES[delivery_point],
-        start_name=delivery_point,
-    )
+ARRIVAL_THRESHOLD = 0.14
+DELIVERY_ARRIVAL_THRESHOLD = 0.07
+BASE_ARRIVAL_THRESHOLD = 0.07
+MISSION_TIMEOUT_SECONDS = 180.0

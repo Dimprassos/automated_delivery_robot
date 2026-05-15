@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.2943915853601192 -0.295857167634465 -0.908736557440311 5.16534364997155
-  position -2.1547483114665984 -2.2056114958117936 0.4076477032819801
+  orientation -0.3208980844257362 0.30970579820703176 0.8950255728022813 1.394574621945601
+  position -1.45 -4.1 2.65
 }
 TexturedBackground {
 }
@@ -18,22 +18,29 @@ TexturedBackgroundLight {
 Floor {
   size 5 4
 }
-E-puck {
-  hidden position_0_0 573.6061639221095
-  hidden position_0_1 582.9532745841087
-  hidden rotation_1 0 -1 0 4.446884338412412
-  hidden rotation_2 0 1 0 4.900226323586771
-  translation -1.86537 -1.59088 0.0194809
-  rotation 0.042332881365187196 -0.09452975838827184 -0.9946215621704447 2.07579
+DEF DELIVERY_ROBOT E-puck {
+  translation -1.4 -0.9 0
+  rotation 0 0 1 0
   controller "delivery_controller"
   controllerArgs [
     ""
   ]
+  turretSlot [
+    GPS {
+      name "gps"
+    }
+  ]
+}
+DEF START_RESET_SUPERVISOR Robot {
+  name "start_reset_supervisor"
+  controller "reset_supervisor"
+  supervisor TRUE
 }
 DirectionalLight {
   direction 0 -1 0
 }
-DEF BASE_MARKER Solid {
+
+DEF BASE_MARKER Transform {
   translation -1.4 -0.9 0.006
   children [
     Shape {
@@ -47,9 +54,8 @@ DEF BASE_MARKER Solid {
       }
     }
   ]
-  name "BASE"
 }
-DEF POINT_B_MARKER Solid {
+DEF POINT_B_MARKER Transform {
   translation -0.2 -0.9 0.006
   children [
     Shape {
@@ -63,9 +69,8 @@ DEF POINT_B_MARKER Solid {
       }
     }
   ]
-  name "POINT_B"
 }
-DEF POINT_A_MARKER Solid {
+DEF POINT_A_MARKER Transform {
   translation 1.2 0.25 0.006
   children [
     Shape {
@@ -79,124 +84,307 @@ DEF POINT_A_MARKER Solid {
       }
     }
   ]
-  name "POINT_A"
 }
-DEF HALL_SOUTH_WALL Solid {
-  translation -0.55 -1.3 0.09
+
+DEF CLASSROOM_FLOOR Transform {
+  translation -1.25 0.82 0.004
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.32 0.32 0.35
+        baseColor 0.55 0.68 0.82
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 2.4 0.08 0.18
+        size 1.1 0.82 0.008
+      }
+    }
+  ]
+}
+DEF LAB_FLOOR Transform {
+  translation 1.15 0.95 0.004
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.78 0.66
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 1.15 0.76 0.008
+      }
+    }
+  ]
+}
+DEF OFFICE_FLOOR Transform {
+  translation -1.35 -1.05 0.004
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.78 0.69 0.52
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.85 0.48 0.008
+      }
+    }
+  ]
+}
+DEF DELIVERY_ROOM_FLOOR Transform {
+  translation 1.25 0.25 0.005
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.72 0.72 0.86
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.9 0.46 0.01
+      }
+    }
+  ]
+}
+
+DEF OUTER_WEST_WALL Solid {
+  translation -2.05 0 0.18
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.28 0.29 0.31
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.14 3.1 0.36
+      }
+    }
+  ]
+  name "outer_west_wall"
+  boundingObject Box {
+    size 0.14 3.1 0.36
+  }
+}
+DEF OUTER_EAST_WALL Solid {
+  translation 2.05 0 0.18
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.28 0.29 0.31
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.14 3.1 0.36
+      }
+    }
+  ]
+  name "outer_east_wall"
+  boundingObject Box {
+    size 0.14 3.1 0.36
+  }
+}
+DEF OUTER_SOUTH_WALL Solid {
+  translation 0 -1.55 0.18
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.28 0.29 0.31
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 4.1 0.14 0.36
+      }
+    }
+  ]
+  name "outer_south_wall"
+  boundingObject Box {
+    size 4.1 0.14 0.36
+  }
+}
+DEF OUTER_NORTH_WALL Solid {
+  translation 0 1.55 0.18
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.28 0.29 0.31
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 4.1 0.14 0.36
+      }
+    }
+  ]
+  name "outer_north_wall"
+  boundingObject Box {
+    size 4.1 0.14 0.36
+  }
+}
+DEF HALL_SOUTH_WALL Solid {
+  translation -0.65 -1.18 0.18
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.34 0.35 0.38
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 2.35 0.14 0.36
       }
     }
   ]
   name "hall_south_wall"
   boundingObject Box {
-    size 2.4 0.08 0.18
+    size 2.35 0.14 0.36
   }
 }
 DEF HALL_NORTH_WALL_LEFT Solid {
-  translation -0.95 -0.5 0.09
+  translation -1.05 -0.62 0.18
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.32 0.32 0.35
+        baseColor 0.34 0.35 0.38
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 1.55 0.08 0.18
+        size 1.65 0.14 0.36
       }
     }
   ]
   name "hall_north_wall_left"
   boundingObject Box {
-    size 1.55 0.08 0.18
+    size 1.65 0.14 0.36
   }
 }
 DEF VERTICAL_WEST_WALL Solid {
-  translation -0.22 0.05 0.09
+  translation -0.08 0.05 0.18
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.32 0.32 0.35
+        baseColor 0.34 0.35 0.38
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 0.08 1.1 0.18
+        size 0.14 1.16 0.36
       }
     }
   ]
   name "vertical_west_wall"
   boundingObject Box {
-    size 0.08 1.1 0.18
+    size 0.14 1.16 0.36
   }
 }
 DEF VERTICAL_EAST_WALL Solid {
-  translation 0.62 -0.2 0.09
+  translation 0.48 -0.55 0.18
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.32 0.32 0.35
+        baseColor 0.34 0.35 0.38
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 0.08 1.25 0.18
+        size 0.14 0.68 0.36
       }
     }
   ]
   name "vertical_east_wall"
   boundingObject Box {
-    size 0.08 1.25 0.18
+    size 0.14 0.68 0.36
   }
 }
 DEF DELIVERY_SOUTH_WALL Solid {
-  translation 1.15 -0.15 0.09
+  translation 1.15 -0.05 0.18
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.32 0.32 0.35
+        baseColor 0.34 0.35 0.38
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 1.1 0.08 0.18
+        size 1.1 0.14 0.36
       }
     }
   ]
   name "delivery_south_wall"
   boundingObject Box {
-    size 1.1 0.08 0.18
+    size 1.1 0.14 0.36
   }
 }
 DEF DELIVERY_NORTH_WALL Solid {
-  translation 0.75 0.65 0.09
+  translation 0.95 0.55 0.18
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.32 0.32 0.35
+        baseColor 0.34 0.35 0.38
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 1.9 0.08 0.18
+        size 1.75 0.14 0.36
       }
     }
   ]
   name "delivery_north_wall"
   boundingObject Box {
-    size 1.9 0.08 0.18
+    size 1.75 0.14 0.36
   }
 }
+
+DEF CLASSROOM_DESKS Transform {
+  translation -1.25 0.82 0.035
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.18 0.18 0.2
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.75 0.32 0.07
+      }
+    }
+  ]
+}
+DEF LAB_BENCH Transform {
+  translation 1.15 0.95 0.04
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.18 0.32 0.26
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.8 0.24 0.08
+      }
+    }
+  ]
+}
+DEF OFFICE_DESK Transform {
+  translation -1.35 -1.05 0.035
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.38 0.25 0.12
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.45 0.18 0.07
+      }
+    }
+  ]
+}
 DEF OBSTACLE_CORRIDOR Solid {
-  translation -0.65 -0.9 0.09
+  translation -0.65 -0.84 0.09
   children [
     Shape {
       appearance PBRAppearance {
@@ -205,17 +393,17 @@ DEF OBSTACLE_CORRIDOR Solid {
         metalness 0
       }
       geometry Box {
-        size 0.16 0.16 0.18
+        size 0.12 0.12 0.18
       }
     }
   ]
   name "obstacle_corridor"
   boundingObject Box {
-    size 0.16 0.16 0.18
+    size 0.12 0.12 0.18
   }
 }
 DEF OBSTACLE_TURN Solid {
-  translation 0.28 -0.22 0.09
+  translation 0.36 -0.05 0.09
   children [
     Shape {
       appearance PBRAppearance {
