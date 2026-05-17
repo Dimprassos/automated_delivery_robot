@@ -1,3 +1,4 @@
+import math
 import sys
 
 from controller import Robot
@@ -6,21 +7,36 @@ from fsm import RobotState
 from metrics import MissionMetrics
 from mission_config import (
     BASE_ARRIVAL_THRESHOLD,
-    DEFAULT_DELIVERY_POINT,
+    DEFAULT_DELIVERY_DROPOFF,
+    DEFAULT_DELIVERY_PICKUP,
+    DEMO_JOB_DROPOFF,
+    DEMO_JOB_PICKUP,
+    DEMO_JOB_PRIORITY,
+    DEMO_JOB_TIME_SECONDS,
+    DEMO_JOBS_ENABLED,
     DELIVERY_ARRIVAL_THRESHOLD,
     DELIVERY_POINTS,
     INITIAL_POSE,
     MISSION_TIMEOUT_SECONDS,
     NAV_GRAPH_EDGES,
     OBSTACLE_AVOIDANCE_ENABLED,
+    SERVICE_POINTS,
     WAYPOINTS,
 )
+from mission_manager import JobMissionManager, ScheduledDeliveryJob
 from movement import MovementController
 from odometry import Odometry
 from path_follower import RoutePathFollower
 from planner import GraphPlanner
 from sensors import SensorController
 
+
+SCRIPTED_JOB_DEFAULT_TIME = 6.0
+BASE_NODE = "BASE"
+
+LEG_PICKUP = "PICKUP"
+LEG_DROPOFF = "DROPOFF"
+LEG_RETURN_BASE = "RETURN_BASE"
 
 print("Delivery controller is running")
 
@@ -33,30 +49,142 @@ odometry = Odometry(robot, timestep, INITIAL_POSE)
 planner = GraphPlanner(WAYPOINTS, NAV_GRAPH_EDGES)
 metrics = MissionMetrics(robot)
 
-delivery_point = DEFAULT_DELIVERY_POINT
+initial_pickup = DEFAULT_DELIVERY_PICKUP
+initial_dropoff = DEFAULT_DELIVERY_DROPOFF
 obstacle_avoidance_enabled = OBSTACLE_AVOIDANCE_ENABLED
+scheduled_jobs = []
+jobs_disabled = False
+
+
+def is_number(value):
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
+
+def parse_scheduled_job(spec, default_priority=0):
+    normalized = spec.strip().upper()
+    normalized = normalized.replace("->", ",").replace("@", ",")
+    parts = [part.strip() for part in normalized.split(",") if part.strip()]
+
+    if not parts:
+        print("Empty delivery job argument, ignoring it")
+        return None
+
+    if len(parts) >= 2 and parts[0] in SERVICE_POINTS and parts[1] in SERVICE_POINTS:
+        pickup = parts[0]
+        dropoff = parts[1]
+        rest = parts[2:]
+    elif parts[0] in DELIVERY_POINTS:
+        pickup = BASE_NODE
+        dropoff = parts[0]
+        rest = parts[1:]
+    else:
+        print(f"Unknown delivery job '{spec}', ignoring it")
+        return None
+
+    if pickup == dropoff:
+        print(f"Invalid delivery job '{pickup}->{dropoff}', ignoring it")
+        return None
+
+    trigger_time = SCRIPTED_JOB_DEFAULT_TIME
+    priority = default_priority
+
+    if len(rest) >= 1:
+        if is_number(rest[0]):
+            trigger_time = max(0.0, float(rest[0]))
+        else:
+            print(f"Invalid job time '{rest[0]}', using {trigger_time:.1f}s")
+
+    if len(rest) >= 2:
+        try:
+            priority = max(0, int(rest[1]))
+        except ValueError:
+            print(f"Invalid job priority '{rest[1]}', using {priority}")
+
+    return ScheduledDeliveryJob(
+        pickup=pickup,
+        dropoff=dropoff,
+        trigger_time=trigger_time,
+        priority=priority,
+    )
+
 
 for raw_arg in sys.argv[1:]:
-    arg = raw_arg.strip().upper()
+    clean_arg = raw_arg.strip()
+    arg = clean_arg.upper()
 
     if not arg:
         continue
 
     if arg in DELIVERY_POINTS:
-        delivery_point = arg
+        initial_pickup = BASE_NODE
+        initial_dropoff = arg
+    elif arg in ["NO_REQUESTS", "--NO_REQUESTS", "NO_JOBS", "--NO_JOBS"]:
+        jobs_disabled = True
+    elif arg.startswith("REQUEST=") or arg.startswith("--REQUEST="):
+        job = parse_scheduled_job(clean_arg.split("=", 1)[1])
+
+        if job is not None:
+            scheduled_jobs.append(job)
+    elif arg.startswith("JOB=") or arg.startswith("--JOB="):
+        job = parse_scheduled_job(clean_arg.split("=", 1)[1])
+
+        if job is not None:
+            scheduled_jobs.append(job)
+    elif arg.startswith("URGENT=") or arg.startswith("--URGENT="):
+        job = parse_scheduled_job(clean_arg.split("=", 1)[1], default_priority=3)
+
+        if job is not None:
+            scheduled_jobs.append(job)
     elif arg in ["OBSTACLES", "AVOID_OBSTACLES", "--OBSTACLES"]:
         obstacle_avoidance_enabled = True
     else:
         print(f"Unknown controller argument '{raw_arg}', ignoring it")
 
-route_to_delivery = planner.plan("BASE", delivery_point)
-route_to_base = planner.plan(delivery_point, "BASE")
-planned_distance = planner.path_distance(route_to_delivery) + planner.path_distance(route_to_base)
+if jobs_disabled:
+    scheduled_jobs = []
+elif not scheduled_jobs and DEMO_JOBS_ENABLED:
+    scheduled_jobs.append(
+        ScheduledDeliveryJob(
+            pickup=DEMO_JOB_PICKUP,
+            dropoff=DEMO_JOB_DROPOFF,
+            trigger_time=DEMO_JOB_TIME_SECONDS,
+            priority=DEMO_JOB_PRIORITY,
+        )
+    )
+
+mission_manager = JobMissionManager(
+    service_points=SERVICE_POINTS,
+    planner=planner,
+    default_pickup=initial_pickup,
+    default_dropoff=initial_dropoff,
+)
+
+planned_distance = 0.0
+current_node = BASE_NODE
+active_follower = None
+active_leg = None
+active_leg_target = None
+
+visible_args = [arg for arg in sys.argv[1:] if arg.strip()]
+print(f"Controller args: {', '.join(visible_args) if visible_args else 'none'}")
+print(f"Initial delivery job: {initial_pickup}->{initial_dropoff}")
+
+if scheduled_jobs:
+    for job in scheduled_jobs:
+        print(
+            "Scheduled delivery job: "
+            f"{job.label()} at {job.trigger_time:.1f}s, priority={job.priority}"
+        )
+else:
+    print("Scheduled delivery job: none")
 
 state = RobotState.IDLE
 previous_state = None
 
-active_follower = None
 mission_start_time = None
 avoidance_start_time = None
 avoidance_phase = 0
@@ -80,6 +208,42 @@ def create_follower(route, final_threshold):
         waypoints=WAYPOINTS,
         final_threshold=final_threshold,
     )
+
+
+def route_distance(route):
+    total = 0.0
+
+    for index in range(len(route) - 1):
+        total += planner.distance_between(route[index], route[index + 1])
+
+    return total
+
+
+def arrival_threshold_for(node):
+    if node == BASE_NODE:
+        return BASE_ARRIVAL_THRESHOLD
+
+    return DELIVERY_ARRIVAL_THRESHOLD
+
+
+def activate_named_route(start, target, final_threshold, current_time, leg):
+    global active_follower, active_leg, active_leg_target, planned_distance
+
+    route = planner.plan(start, target)
+
+    if len(route) < 2:
+        active_follower = None
+        active_leg = leg
+        active_leg_target = target
+        return route
+
+    active_follower = create_follower(route, final_threshold)
+    active_leg = leg
+    active_leg_target = target
+    planned_distance += route_distance(route)
+    reset_progress_watch(current_time)
+
+    return route
 
 
 def should_avoid_obstacle(current_time):
@@ -167,6 +331,154 @@ def print_tracking_status(prefix, result):
     )
 
 
+def print_job_decision(current_time, decision):
+    action = decision["action"]
+    job_label = decision.get("job")
+
+    if action == "reject":
+        print(f"Incoming job at {current_time:.1f}s rejected: {job_label} ({decision['reason']})")
+        return
+
+    if action in ["merge_current", "merge_pending"]:
+        print(
+            f"Incoming job at {current_time:.1f}s merged: "
+            f"{job_label}, priority={decision.get('priority', 0)}"
+        )
+        return
+
+    if action == "accept":
+        print(
+            f"Incoming job at {current_time:.1f}s accepted: "
+            f"{job_label}, priority={decision.get('priority', 0)}"
+        )
+        return
+
+    print(
+        f"Incoming job at {current_time:.1f}s queued: "
+        f"{job_label}, priority={decision.get('priority', 0)}"
+    )
+
+
+def process_scheduled_jobs(current_time, state):
+    if state in [RobotState.FINISHED, RobotState.ERROR]:
+        return
+
+    for job in scheduled_jobs:
+        if job.dispatched or current_time < job.trigger_time:
+            continue
+
+        job.dispatched = True
+        decision = mission_manager.handle_incoming_job(
+            pickup=job.pickup,
+            dropoff=job.dropoff,
+            current_time=current_time,
+            priority=job.priority,
+        )
+        print_job_decision(current_time, decision)
+
+
+def begin_current_job(current_time):
+    global current_node, state
+
+    job = mission_manager.current_job()
+
+    if job is None:
+        begin_return_to_base(current_time)
+        return
+
+    if current_node == job.pickup:
+        print(f"Picked up package at {job.pickup} for {job.dropoff}")
+        begin_dropoff_leg(job, current_time)
+        return
+
+    route = activate_named_route(
+        current_node,
+        job.pickup,
+        arrival_threshold_for(job.pickup),
+        current_time,
+        LEG_PICKUP,
+    )
+    state = RobotState.GO_TO_DESTINATION
+    print(f"State: GO_TO_PICKUP -> {job.pickup}")
+    print(f"A* route to pickup: {' -> '.join(route)}")
+
+
+def begin_dropoff_leg(job, current_time):
+    global state
+
+    route = activate_named_route(
+        job.pickup,
+        job.dropoff,
+        arrival_threshold_for(job.dropoff),
+        current_time,
+        LEG_DROPOFF,
+    )
+    state = RobotState.GO_TO_DESTINATION
+    print(f"State: GO_TO_DROPOFF -> {job.dropoff}")
+    print(f"A* route to dropoff: {' -> '.join(route)}")
+
+
+def begin_return_to_base(current_time):
+    global state
+
+    if current_node == BASE_NODE:
+        state = RobotState.FINISHED
+        return
+
+    route = activate_named_route(
+        current_node,
+        BASE_NODE,
+        BASE_ARRIVAL_THRESHOLD,
+        current_time,
+        LEG_RETURN_BASE,
+    )
+    state = RobotState.RETURN_TO_BASE
+    print("State: RETURN_TO_BASE")
+    print(f"A* route to base: {' -> '.join(route)}")
+
+
+def finish_active_leg(current_time):
+    global current_node, state
+
+    movement.stop()
+    current_node = active_leg_target
+    metrics.record_waypoint(current_node)
+
+    if active_leg == LEG_PICKUP:
+        job = mission_manager.current_job()
+        print(f"Reached pickup point: {current_node}")
+        print(f"Picked up package at {current_node} for {job.dropoff}")
+        begin_dropoff_leg(job, current_time)
+        return
+
+    if active_leg == LEG_DROPOFF:
+        job = mission_manager.current_job()
+        print(f"Reached dropoff point: {current_node}")
+        print(f"Package delivered: {job.pickup}->{job.dropoff}")
+        metrics.record_delivery(job.pickup, job.dropoff)
+        mission_manager.mark_current_delivered()
+
+        next_job = mission_manager.select_next_job(current_node)
+
+        if next_job is not None:
+            print(f"Next queued job selected: {next_job.label()}")
+            begin_current_job(current_time)
+        else:
+            begin_return_to_base(current_time)
+
+        return
+
+    if active_leg == LEG_RETURN_BASE:
+        print("Reached base")
+        next_job = mission_manager.select_next_job(current_node)
+
+        if next_job is not None:
+            print(f"Next queued job selected: {next_job.label()}")
+            begin_current_job(current_time)
+        else:
+            state = RobotState.FINISHED
+
+
 while robot.step(timestep) != -1:
     current_time = robot.getTime()
     pose = odometry.update(movement.get_last_speeds())
@@ -180,32 +492,27 @@ while robot.step(timestep) != -1:
         movement.stop()
         state = RobotState.ERROR
 
+    process_scheduled_jobs(current_time, state)
+
     if state == RobotState.IDLE:
         print("State: IDLE")
         metrics.start_mission()
         mission_start_time = current_time
-
-        active_follower = create_follower(route_to_delivery, DELIVERY_ARRIVAL_THRESHOLD)
-        reset_progress_watch(current_time)
-        state = RobotState.GO_TO_DESTINATION
-        print(f"State: GO_TO_DESTINATION -> {delivery_point}")
-        print(f"A* route to delivery: {' -> '.join(route_to_delivery)}")
+        print("Mission model: fixed pickup/dropoff jobs over BASE, POINT_A, POINT_B")
         print("Tracking mode: pure pursuit lookahead")
         print(f"Obstacle avoidance enabled: {obstacle_avoidance_enabled}")
+        begin_current_job(current_time)
 
     elif state == RobotState.GO_TO_DESTINATION:
         result = active_follower.update(pose)
         record_passed_nodes(result)
 
         if current_time - last_status_print > 2.0:
-            print_tracking_status(f"Tracking to {delivery_point}", result)
+            print_tracking_status(f"Tracking to {active_leg_target}", result)
             last_status_print = current_time
 
         if result["done"]:
-            movement.stop()
-            print(f"Reached delivery point: {delivery_point}")
-            metrics.record_waypoint(delivery_point)
-            state = RobotState.DELIVER
+            finish_active_leg(current_time)
 
         elif should_avoid_obstacle(current_time):
             print("Obstacle detected - switching to AVOID_OBSTACLE")
@@ -260,17 +567,6 @@ while robot.step(timestep) != -1:
             print("Recovery complete - returning to route tracking")
             state = recovery_previous_state or RobotState.GO_TO_DESTINATION
 
-    elif state == RobotState.DELIVER:
-        print("State: DELIVER")
-        print(f"Package delivered at {delivery_point}")
-        metrics.record_delivery(delivery_point)
-
-        active_follower = create_follower(route_to_base, BASE_ARRIVAL_THRESHOLD)
-        reset_progress_watch(current_time)
-        state = RobotState.RETURN_TO_BASE
-        print("State: RETURN_TO_BASE")
-        print(f"A* route to base: {' -> '.join(route_to_base)}")
-
     elif state == RobotState.RETURN_TO_BASE:
         result = active_follower.update(pose)
         record_passed_nodes(result)
@@ -280,10 +576,7 @@ while robot.step(timestep) != -1:
             last_status_print = current_time
 
         if result["done"]:
-            movement.stop()
-            print("Reached base")
-            metrics.record_waypoint("BASE")
-            state = RobotState.FINISHED
+            finish_active_leg(current_time)
 
         elif should_avoid_obstacle(current_time):
             print("Obstacle detected during return - switching to AVOID_OBSTACLE")

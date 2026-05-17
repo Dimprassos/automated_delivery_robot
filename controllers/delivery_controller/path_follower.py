@@ -11,11 +11,12 @@ class RoutePathFollower:
         route_names,
         waypoints,
         final_threshold,
-        base_lookahead=0.32,
-        corner_lookahead=0.18,
-        cruise_speed=0.105,
-        corner_speed=0.055,
-        final_speed=0.045,
+        base_lookahead=0.24,
+        corner_lookahead=0.10,
+        cruise_speed=0.085,
+        corner_speed=0.04,
+        final_speed=0.035,
+        route_end_threshold=0.20,
     ):
         if len(route_names) < 2:
             raise ValueError("A route must contain at least a start and goal node")
@@ -29,6 +30,7 @@ class RoutePathFollower:
         self.cruise_speed = cruise_speed
         self.corner_speed = corner_speed
         self.final_speed = final_speed
+        self.route_end_threshold = max(final_threshold, route_end_threshold)
 
         self.segment_lengths = []
         self.cumulative_distances = [0.0]
@@ -55,9 +57,15 @@ class RoutePathFollower:
         final_x, final_y = self.points[-1]
         final_distance = math.hypot(final_x - pose[0], final_y - pose[1])
         remaining = max(0.0, self.total_length - self.progress)
-        passed_nodes = self._consume_passed_nodes()
+        passed_nodes = self._consume_passed_nodes(pose)
 
-        if final_distance <= self.final_threshold:
+        reached_final_point = final_distance <= self.final_threshold
+        reached_route_end = (
+            remaining <= self.final_threshold
+            and final_distance <= self.route_end_threshold
+        )
+
+        if reached_final_point or reached_route_end:
             self.movement.stop()
             return self._result(
                 done=True,
@@ -74,6 +82,13 @@ class RoutePathFollower:
 
         lookahead_distance = min(self._adaptive_lookahead(), max(remaining, self.final_threshold))
         lookahead_progress = min(self.total_length, self.progress + lookahead_distance)
+
+        if self.next_node_index < len(self.points) - 1:
+            lookahead_progress = min(
+                lookahead_progress,
+                self.cumulative_distances[self.next_node_index],
+            )
+
         lookahead_point = self._point_at(lookahead_progress)
 
         curvature, target_distance, heading_error = self._curvature_to_point(pose, lookahead_point)
@@ -84,7 +99,7 @@ class RoutePathFollower:
         if abs(curvature) > 1e-6:
             turn_radius = 1.0 / curvature
 
-        if abs(heading_error) > 1.10:
+        if abs(heading_error) > 0.80:
             motion_mode = "align"
             linear_speed = 0.0
             turn_radius = 0.0
@@ -110,7 +125,9 @@ class RoutePathFollower:
         best_progress = 0.0
         best_distance = float("inf")
 
-        for index in range(len(self.points) - 1):
+        active_segment = max(0, min(self.next_node_index - 1, len(self.points) - 2))
+
+        for index in [active_segment]:
             ax, ay = self.points[index]
             bx, by = self.points[index + 1]
             segment_x = bx - ax
@@ -128,14 +145,16 @@ class RoutePathFollower:
 
         return best_progress, best_distance
 
-    def _consume_passed_nodes(self):
+    def _consume_passed_nodes(self, pose):
         passed_nodes = []
-        pass_margin = 0.04
+        pass_radius = 0.16
+        x, y, _ = pose
 
         while self.next_node_index < len(self.route_names) - 1:
-            node_progress = self.cumulative_distances[self.next_node_index]
+            node_x, node_y = self.points[self.next_node_index]
+            node_distance = math.hypot(node_x - x, node_y - y)
 
-            if self.progress + pass_margin < node_progress:
+            if node_distance > pass_radius:
                 break
 
             passed_nodes.append(self.route_names[self.next_node_index])
@@ -160,11 +179,7 @@ class RoutePathFollower:
         return self.points[-1]
 
     def _segment_index_at_progress(self):
-        for index in range(len(self.segment_lengths)):
-            if self.progress <= self.cumulative_distances[index + 1]:
-                return index
-
-        return len(self.segment_lengths) - 1
+        return max(0, min(self.next_node_index - 1, len(self.segment_lengths) - 1))
 
     def _upcoming_corner(self):
         index = self._segment_index_at_progress()

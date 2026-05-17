@@ -3,24 +3,27 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/tables/protos/Table.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/chairs/protos/OfficeChair.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/cabinet/protos/Cabinet.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.3208980844257362 0.30970579820703176 0.8950255728022813 1.394574621945601
-  position -1.45 -4.1 2.65
+  orientation -0.3790946962425227 0.4202356109183481 0.8244802305204036 1.260668705233791
+  position -1.85 -5.55 4.15
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Floor {
-  size 5 4
+  size 7 5
 }
 DEF DELIVERY_ROBOT E-puck {
-  translation -1.4 -0.9 0
-  rotation 0 0 1 0
+  translation -2.25 -0.72 0
+  rotation 0 0 1 1.5708
   controller "delivery_controller"
   controllerArgs [
     ""
@@ -37,387 +40,2437 @@ DEF START_RESET_SUPERVISOR Robot {
   supervisor TRUE
 }
 DirectionalLight {
-  direction 0 -1 0
+  direction -0.25 -0.7 -1
+  intensity 1.4
 }
 
-DEF BASE_MARKER Transform {
-  translation -1.4 -0.9 0.006
+DEF ACADEMIC_WING_FLOORS Transform {
+  translation 0 0 0
   children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.1 0.7 0.25
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.28 0.28 0.012
-      }
+    Transform {
+      translation 0 0 0.001
+      children [
+        Shape {
+          appearance DEF TERRAZZO_BASE PBRAppearance {
+            baseColor 0.76 0.77 0.74
+            roughness 0.85
+            metalness 0
+          }
+          geometry Box {
+            size 6.08 4.08 0.004
+          }
+        }
+      ]
     }
-  ]
-}
-DEF POINT_B_MARKER Transform {
-  translation -0.2 -0.9 0.006
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.9 0.55 0.1
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.3 0.3 0.012
-      }
+    Transform {
+      translation -1.82 1.25 0.004
+      children [
+        Shape {
+          appearance DEF CLASSROOM_APP PBRAppearance {
+            baseColor 0.82 0.74 0.48
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 2.34 1.38 0.008
+          }
+        }
+      ]
     }
-  ]
-}
-DEF POINT_A_MARKER Transform {
-  translation 1.2 0.25 0.006
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.1 0.25 0.85
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.32 0.32 0.012
-      }
+    Transform {
+      translation 0 1.25 0.004
+      children [
+        Shape {
+          appearance DEF LOUNGE_APP PBRAppearance {
+            baseColor 0.83 0.58 0.36
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.86 1.38 0.008
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.82 1.25 0.004
+      children [
+        Shape {
+          appearance DEF TEACHING_LAB_APP PBRAppearance {
+            baseColor 0.53 0.72 0.61
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 2.34 1.38 0.008
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.25 -1.25 0.004
+      children [
+        Shape {
+          appearance DEF MAILROOM_APP PBRAppearance {
+            baseColor 0.63 0.78 0.61
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 1.38 1.38 0.008
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.95 -1.25 0.004
+      children [
+        Shape {
+          appearance DEF OFFICE_APP PBRAppearance {
+            baseColor 0.74 0.63 0.44
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.9 1.38 0.008
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0.95 -1.25 0.004
+      children [
+        Shape {
+          appearance DEF STORAGE_APP PBRAppearance {
+            baseColor 0.66 0.68 0.68
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.9 1.38 0.008
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.22 -1.25 0.004
+      children [
+        Shape {
+          appearance DEF RESEARCH_LAB_APP PBRAppearance {
+            baseColor 0.56 0.66 0.8
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 1.36 1.38 0.008
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0 0 0.007
+      children [
+        Shape {
+          appearance DEF CORRIDOR_APP PBRAppearance {
+            baseColor 0.9 0.91 0.88
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 5.86 0.58 0.01
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0 0 0.008
+      children [
+        Shape {
+          appearance USE CORRIDOR_APP
+          geometry Box {
+            size 0.58 3.86 0.01
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0 0 0.011
+      children [
+        Shape {
+          appearance DEF ATRIUM_APP PBRAppearance {
+            baseColor 0.84 0.86 0.82
+            roughness 0.8
+            metalness 0
+          }
+          geometry Box {
+            size 1.16 0.86 0.01
+          }
+        }
+      ]
     }
   ]
 }
 
-DEF CLASSROOM_FLOOR Transform {
-  translation -1.25 0.82 0.004
+DEF SERVICE_POINT_MARKERS Transform {
+  translation 0 0 0
   children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.55 0.68 0.82
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 1.1 0.82 0.008
-      }
+    Transform {
+      translation -2.25 -0.72 0.018
+      children [
+        Shape {
+          appearance DEF BASE_APP PBRAppearance {
+            baseColor 0.08 0.58 0.24
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.34 0.28 0.012
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.95 -0.76 0.018
+      children [
+        Shape {
+          appearance DEF POINT_B_APP PBRAppearance {
+            baseColor 0.9 0.55 0.12
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.3 0.3 0.012
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.05 0.82 0.018
+      children [
+        Shape {
+          appearance DEF POINT_A_APP PBRAppearance {
+            baseColor 0.1 0.28 0.82
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.34 0.3 0.012
+          }
+        }
+      ]
     }
   ]
 }
-DEF LAB_FLOOR Transform {
-  translation 1.15 0.95 0.004
+
+DEF FLOOR_PLAN_TEXT Transform {
+  translation 0 0 0
   children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.5 0.78 0.66
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 1.15 0.76 0.008
-      }
+    Transform {
+      translation -2.86 1.86 0.026
+      children [
+        Shape {
+          appearance DEF TEXT_DARK PBRAppearance {
+            baseColor 0.05 0.06 0.07
+            roughness 1
+            metalness 0
+          }
+          geometry Text {
+            string [
+              "ENGINEERING BUILDING - LEVEL 1"
+            ]
+            fontStyle FontStyle {
+              size 0.105
+              justify [
+                "BEGIN"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
     }
-  ]
-}
-DEF OFFICE_FLOOR Transform {
-  translation -1.35 -1.05 0.004
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.78 0.69 0.52
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.85 0.48 0.008
-      }
+    Transform {
+      translation -1.82 1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "101 ACTIVE CLASSROOM"
+            ]
+            fontStyle FontStyle {
+              size 0.085
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
     }
-  ]
-}
-DEF DELIVERY_ROOM_FLOOR Transform {
-  translation 1.25 0.25 0.005
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.72 0.72 0.86
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.9 0.46 0.01
-      }
+    Transform {
+      translation 0 1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "COMMON STUDY"
+            ]
+            fontStyle FontStyle {
+              size 0.075
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.82 1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "112 TEACHING LAB"
+            ]
+            fontStyle FontStyle {
+              size 0.085
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.25 -1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "B01 MAIL / BASE"
+            ]
+            fontStyle FontStyle {
+              size 0.075
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.95 -1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "108 FACULTY OFFICE"
+            ]
+            fontStyle FontStyle {
+              size 0.065
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0.95 -1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "110 PREP / STORAGE"
+            ]
+            fontStyle FontStyle {
+              size 0.065
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.22 -1.82 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "114 RESEARCH LAB"
+            ]
+            fontStyle FontStyle {
+              size 0.075
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.25 -0.46 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "BASE"
+            ]
+            fontStyle FontStyle {
+              size 0.075
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.95 -0.48 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "POINT B"
+            ]
+            fontStyle FontStyle {
+              size 0.07
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.05 0.54 0.026
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "POINT A"
+            ]
+            fontStyle FontStyle {
+              size 0.075
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
 
 DEF OUTER_WEST_WALL Solid {
-  translation -2.05 0 0.18
+  translation -3.05 0 0.23
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.28 0.29 0.31
+      appearance DEF WALL_APP PBRAppearance {
+        baseColor 0.78 0.79 0.75
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 0.14 3.1 0.36
+        size 0.12 4.1 0.46
       }
     }
   ]
   name "outer_west_wall"
   boundingObject Box {
-    size 0.14 3.1 0.36
+    size 0.12 4.1 0.46
   }
 }
 DEF OUTER_EAST_WALL Solid {
-  translation 2.05 0 0.18
+  translation 3.05 0 0.23
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.28 0.29 0.31
-        roughness 1
-        metalness 0
-      }
+      appearance USE WALL_APP
       geometry Box {
-        size 0.14 3.1 0.36
+        size 0.12 4.1 0.46
       }
     }
   ]
   name "outer_east_wall"
   boundingObject Box {
-    size 0.14 3.1 0.36
+    size 0.12 4.1 0.46
   }
 }
 DEF OUTER_SOUTH_WALL Solid {
-  translation 0 -1.55 0.18
+  translation 0 -2.05 0.23
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.28 0.29 0.31
-        roughness 1
-        metalness 0
-      }
+      appearance USE WALL_APP
       geometry Box {
-        size 4.1 0.14 0.36
+        size 6.1 0.12 0.46
       }
     }
   ]
   name "outer_south_wall"
   boundingObject Box {
-    size 4.1 0.14 0.36
+    size 6.1 0.12 0.46
   }
 }
 DEF OUTER_NORTH_WALL Solid {
-  translation 0 1.55 0.18
+  translation 0 2.05 0.23
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.28 0.29 0.31
-        roughness 1
-        metalness 0
-      }
+      appearance USE WALL_APP
       geometry Box {
-        size 4.1 0.14 0.36
+        size 6.1 0.12 0.46
       }
     }
   ]
   name "outer_north_wall"
   boundingObject Box {
-    size 4.1 0.14 0.36
-  }
-}
-DEF HALL_SOUTH_WALL Solid {
-  translation -0.65 -1.18 0.18
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.34 0.35 0.38
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 2.35 0.14 0.36
-      }
-    }
-  ]
-  name "hall_south_wall"
-  boundingObject Box {
-    size 2.35 0.14 0.36
-  }
-}
-DEF HALL_NORTH_WALL_LEFT Solid {
-  translation -1.05 -0.62 0.18
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.34 0.35 0.38
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 1.65 0.14 0.36
-      }
-    }
-  ]
-  name "hall_north_wall_left"
-  boundingObject Box {
-    size 1.65 0.14 0.36
-  }
-}
-DEF VERTICAL_WEST_WALL Solid {
-  translation -0.08 0.05 0.18
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.34 0.35 0.38
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.14 1.16 0.36
-      }
-    }
-  ]
-  name "vertical_west_wall"
-  boundingObject Box {
-    size 0.14 1.16 0.36
-  }
-}
-DEF VERTICAL_EAST_WALL Solid {
-  translation 0.48 -0.55 0.18
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.34 0.35 0.38
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.14 0.68 0.36
-      }
-    }
-  ]
-  name "vertical_east_wall"
-  boundingObject Box {
-    size 0.14 0.68 0.36
-  }
-}
-DEF DELIVERY_SOUTH_WALL Solid {
-  translation 1.15 -0.05 0.18
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.34 0.35 0.38
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 1.1 0.14 0.36
-      }
-    }
-  ]
-  name "delivery_south_wall"
-  boundingObject Box {
-    size 1.1 0.14 0.36
-  }
-}
-DEF DELIVERY_NORTH_WALL Solid {
-  translation 0.95 0.55 0.18
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.34 0.35 0.38
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 1.75 0.14 0.36
-      }
-    }
-  ]
-  name "delivery_north_wall"
-  boundingObject Box {
-    size 1.75 0.14 0.36
+    size 6.1 0.12 0.46
   }
 }
 
-DEF CLASSROOM_DESKS Transform {
-  translation -1.25 0.82 0.035
+DEF NORTH_CLASSROOM_SOUTH_WALL_1 Solid {
+  translation -2.45 0.48 0.23
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.18 0.18 0.2
+      appearance DEF INTERIOR_WALL_APP PBRAppearance {
+        baseColor 0.7 0.71 0.68
         roughness 1
         metalness 0
       }
       geometry Box {
-        size 0.75 0.32 0.07
+        size 1.1 0.1 0.46
       }
     }
   ]
-}
-DEF LAB_BENCH Transform {
-  translation 1.15 0.95 0.04
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.18 0.32 0.26
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.8 0.24 0.08
-      }
-    }
-  ]
-}
-DEF OFFICE_DESK Transform {
-  translation -1.35 -1.05 0.035
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.38 0.25 0.12
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.45 0.18 0.07
-      }
-    }
-  ]
-}
-DEF OBSTACLE_CORRIDOR Solid {
-  translation -0.65 -0.84 0.09
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.8 0.2 0.2
-        roughness 1
-        metalness 0
-      }
-      geometry Box {
-        size 0.12 0.12 0.18
-      }
-    }
-  ]
-  name "obstacle_corridor"
+  name "north_classroom_south_wall_1"
   boundingObject Box {
-    size 0.12 0.12 0.18
+    size 1.1 0.1 0.46
   }
 }
-DEF OBSTACLE_TURN Solid {
-  translation 0.36 -0.05 0.09
+DEF NORTH_CLASSROOM_SOUTH_WALL_2 Solid {
+  translation -0.98 0.48 0.23
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.8 0.2 0.2
-        roughness 1
-        metalness 0
-      }
+      appearance USE INTERIOR_WALL_APP
       geometry Box {
-        size 0.14 0.14 0.18
+        size 0.94 0.1 0.46
       }
     }
   ]
-  name "obstacle_turn"
+  name "north_classroom_south_wall_2"
   boundingObject Box {
-    size 0.14 0.14 0.18
+    size 0.94 0.1 0.46
   }
+}
+DEF NORTH_LAB_SOUTH_WALL_1 Solid {
+  translation 1.12 0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 1.18 0.1 0.46
+      }
+    }
+  ]
+  name "north_lab_south_wall_1"
+  boundingObject Box {
+    size 1.18 0.1 0.46
+  }
+}
+DEF NORTH_LAB_SOUTH_WALL_2 Solid {
+  translation 2.65 0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.7 0.1 0.46
+      }
+    }
+  ]
+  name "north_lab_south_wall_2"
+  boundingObject Box {
+    size 0.7 0.1 0.46
+  }
+}
+DEF SOUTH_ROOM_NORTH_WALL_1 Solid {
+  translation -2.78 -0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.44 0.1 0.46
+      }
+    }
+  ]
+  name "south_room_north_wall_1"
+  boundingObject Box {
+    size 0.44 0.1 0.46
+  }
+}
+DEF SOUTH_ROOM_NORTH_WALL_2 Solid {
+  translation -1.64 -0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.9 0.1 0.46
+      }
+    }
+  ]
+  name "south_room_north_wall_2"
+  boundingObject Box {
+    size 0.9 0.1 0.46
+  }
+}
+DEF SOUTH_ROOM_NORTH_WALL_3 Solid {
+  translation -0.6 -0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.25 0.1 0.46
+      }
+    }
+  ]
+  name "south_room_north_wall_3"
+  boundingObject Box {
+    size 0.25 0.1 0.46
+  }
+}
+DEF SOUTH_ROOM_NORTH_WALL_4 Solid {
+  translation 0.6 -0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.25 0.1 0.46
+      }
+    }
+  ]
+  name "south_room_north_wall_4"
+  boundingObject Box {
+    size 0.25 0.1 0.46
+  }
+}
+DEF SOUTH_ROOM_NORTH_WALL_5 Solid {
+  translation 1.55 -0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.88 0.1 0.46
+      }
+    }
+  ]
+  name "south_room_north_wall_5"
+  boundingObject Box {
+    size 0.88 0.1 0.46
+  }
+}
+DEF SOUTH_ROOM_NORTH_WALL_6 Solid {
+  translation 2.75 -0.48 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.5 0.1 0.46
+      }
+    }
+  ]
+  name "south_room_north_wall_6"
+  boundingObject Box {
+    size 0.5 0.1 0.46
+  }
+}
+DEF TOP_PARTITION_CLASSROOM_LOUNGE Solid {
+  translation -0.55 1.25 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.1 1.44 0.46
+      }
+    }
+  ]
+  name "top_partition_classroom_lounge"
+  boundingObject Box {
+    size 0.1 1.44 0.46
+  }
+}
+DEF TOP_PARTITION_LOUNGE_LAB Solid {
+  translation 0.55 1.25 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.1 1.44 0.46
+      }
+    }
+  ]
+  name "top_partition_lounge_lab"
+  boundingObject Box {
+    size 0.1 1.44 0.46
+  }
+}
+DEF BOTTOM_PARTITION_MAIL_OFFICE Solid {
+  translation -1.5 -1.25 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.1 1.44 0.46
+      }
+    }
+  ]
+  name "bottom_partition_mail_office"
+  boundingObject Box {
+    size 0.1 1.44 0.46
+  }
+}
+DEF BOTTOM_PARTITION_OFFICE_CROSS Solid {
+  translation -0.48 -1.25 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.1 1.44 0.46
+      }
+    }
+  ]
+  name "bottom_partition_office_cross"
+  boundingObject Box {
+    size 0.1 1.44 0.46
+  }
+}
+DEF BOTTOM_PARTITION_CROSS_STORAGE Solid {
+  translation 0.48 -1.25 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.1 1.44 0.46
+      }
+    }
+  ]
+  name "bottom_partition_cross_storage"
+  boundingObject Box {
+    size 0.1 1.44 0.46
+  }
+}
+DEF BOTTOM_PARTITION_STORAGE_RESEARCH Solid {
+  translation 1.42 -1.25 0.23
+  children [
+    Shape {
+      appearance USE INTERIOR_WALL_APP
+      geometry Box {
+        size 0.1 1.44 0.46
+      }
+    }
+  ]
+  name "bottom_partition_storage_research"
+  boundingObject Box {
+    size 0.1 1.44 0.46
+  }
+}
+
+DEF ARCHITECTURAL_DETAILS Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation -2.25 -0.48 0.025
+      children [
+        Shape {
+          appearance DEF DOOR_THRESHOLD_APP PBRAppearance {
+            baseColor 0.85 0.61 0.24
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.48 0.06 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.95 -0.48 0.025
+      children [
+        Shape {
+          appearance USE DOOR_THRESHOLD_APP
+          geometry Box {
+            size 0.42 0.06 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0.95 -0.48 0.025
+      children [
+        Shape {
+          appearance USE DOOR_THRESHOLD_APP
+          geometry Box {
+            size 0.42 0.06 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.25 -0.48 0.025
+      children [
+        Shape {
+          appearance USE DOOR_THRESHOLD_APP
+          geometry Box {
+            size 0.5 0.06 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.7 0.48 0.025
+      children [
+        Shape {
+          appearance USE DOOR_THRESHOLD_APP
+          geometry Box {
+            size 0.46 0.06 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.05 0.48 0.025
+      children [
+        Shape {
+          appearance USE DOOR_THRESHOLD_APP
+          geometry Box {
+            size 0.54 0.06 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.05 2.0 0.26
+      children [
+        Shape {
+          appearance DEF WINDOW_APP PBRAppearance {
+            baseColor 0.55 0.73 0.84
+            transparency 0.25
+            roughness 0.35
+            metalness 0
+          }
+          geometry Box {
+            size 1.2 0.018 0.22
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.95 2.0 0.26
+      children [
+        Shape {
+          appearance USE WINDOW_APP
+          geometry Box {
+            size 1.3 0.018 0.22
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -3.0 -1.25 0.26
+      children [
+        Shape {
+          appearance USE WINDOW_APP
+          geometry Box {
+            size 0.018 0.8 0.22
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 3.0 -1.25 0.26
+      children [
+        Shape {
+          appearance USE WINDOW_APP
+          geometry Box {
+            size 0.018 0.9 0.22
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.85 0.35 0.035
+      children [
+        Shape {
+          appearance DEF BASEBOARD_APP PBRAppearance {
+            baseColor 0.22 0.22 0.22
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.07 3.3 0.07
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.85 0.35 0.035
+      children [
+        Shape {
+          appearance USE BASEBOARD_APP
+          geometry Box {
+            size 0.07 3.3 0.07
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0 1.85 0.035
+      children [
+        Shape {
+          appearance USE BASEBOARD_APP
+          geometry Box {
+            size 5.7 0.07 0.07
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0 -1.85 0.035
+      children [
+        Shape {
+          appearance USE BASEBOARD_APP
+          geometry Box {
+            size 5.7 0.07 0.07
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.56 1.12 0.18
+      rotation 0 0 1 1.5708
+      children [
+        Shape {
+          appearance DEF DIRECTORY_APP PBRAppearance {
+            baseColor 0.09 0.12 0.16
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.52 0.025 0.24
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.57 1.12 0.19
+      rotation 0 0 1 1.5708
+      children [
+        Shape {
+          appearance DEF DIRECTORY_FACE_APP PBRAppearance {
+            baseColor 0.9 0.92 0.86
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.46 0.012 0.18
+          }
+        }
+      ]
+    }
+  ]
+}
+
+DEF SIGNAGE Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation -0.56 1.115 0.29
+      rotation 0 0 1 1.5708
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "DIRECTORY"
+              "101 CLASSROOM"
+              "108 OFFICE"
+              "112 TEACH LAB"
+              "114 RESEARCH"
+            ]
+            fontStyle FontStyle {
+              size 0.032
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.7 0.43 0.27
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "101"
+            ]
+            fontStyle FontStyle {
+              size 0.065
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.95 -0.43 0.27
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "108"
+            ]
+            fontStyle FontStyle {
+              size 0.065
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.05 0.43 0.27
+      children [
+        Shape {
+          appearance USE TEXT_DARK
+          geometry Text {
+            string [
+              "112"
+            ]
+            fontStyle FontStyle {
+              size 0.065
+              justify [
+                "MIDDLE"
+                "MIDDLE"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
+DEF REALISTIC_DOORWAYS Transform {
+  translation 0 0 0
+  children [
+    Solid {
+      translation -2.52 -0.48 0.23
+      children [
+        Shape {
+          appearance DEF DOOR_FRAME_APP PBRAppearance {
+            baseColor 0.24 0.2 0.16
+            roughness 0.85
+            metalness 0
+          }
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "mailroom_left_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation -1.98 -0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "mailroom_right_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation -2.48 -0.68 0.18
+      rotation 0 0 1 0.25
+      children [
+        Shape {
+          appearance DEF DOOR_PANEL_APP PBRAppearance {
+            baseColor 0.42 0.28 0.16
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.045 0.38 0.34
+          }
+        }
+      ]
+      name "mailroom_open_door"
+      boundingObject Box {
+        size 0.045 0.38 0.34
+      }
+    }
+    Solid {
+      translation -1.19 -0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "office_left_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation -0.71 -0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "office_right_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation -1.17 -0.68 0.18
+      rotation 0 0 1 0.15
+      children [
+        Shape {
+          appearance USE DOOR_PANEL_APP
+          geometry Box {
+            size 0.045 0.34 0.34
+          }
+        }
+      ]
+      name "office_open_door"
+      boundingObject Box {
+        size 0.045 0.34 0.34
+      }
+    }
+    Solid {
+      translation 1.74 0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "teaching_lab_left_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation 2.36 0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "teaching_lab_right_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation 1.76 0.7 0.18
+      rotation 0 0 1 -0.22
+      children [
+        Shape {
+          appearance USE DOOR_PANEL_APP
+          geometry Box {
+            size 0.045 0.42 0.34
+          }
+        }
+      ]
+      name "teaching_lab_open_door"
+      boundingObject Box {
+        size 0.045 0.42 0.34
+      }
+    }
+    Solid {
+      translation -1.95 0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "classroom_left_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation -1.45 0.48 0.23
+      children [
+        Shape {
+          appearance USE DOOR_FRAME_APP
+          geometry Box {
+            size 0.04 0.08 0.46
+          }
+        }
+      ]
+      name "classroom_right_jamb"
+      boundingObject Box {
+        size 0.04 0.08 0.46
+      }
+    }
+    Solid {
+      translation -1.93 0.72 0.18
+      rotation 0 0 1 -0.22
+      children [
+        Shape {
+          appearance USE DOOR_PANEL_APP
+          geometry Box {
+            size 0.045 0.36 0.34
+          }
+        }
+      ]
+      name "classroom_open_door"
+      boundingObject Box {
+        size 0.045 0.36 0.34
+      }
+    }
+  ]
+}
+
+DEF MAILROOM_BASE_FURNITURE Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation -2.78 -1.32 0.17
+      children [
+        Shape {
+          appearance DEF MAIL_LOCKER_APP PBRAppearance {
+            baseColor 0.28 0.32 0.34
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.12 0.92 0.34
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.705 -1.64 0.23
+      children [
+        Shape {
+          appearance DEF MAIL_LOCKER_DOOR_APP PBRAppearance {
+            baseColor 0.72 0.76 0.74
+            roughness 0.7
+            metalness 0
+          }
+          geometry Box {
+            size 0.012 0.16 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.705 -1.4 0.23
+      children [
+        Shape {
+          appearance USE MAIL_LOCKER_DOOR_APP
+          geometry Box {
+            size 0.012 0.16 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.705 -1.16 0.23
+      children [
+        Shape {
+          appearance USE MAIL_LOCKER_DOOR_APP
+          geometry Box {
+            size 0.012 0.16 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.705 -1.64 0.1
+      children [
+        Shape {
+          appearance USE MAIL_LOCKER_DOOR_APP
+          geometry Box {
+            size 0.012 0.16 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.705 -1.4 0.1
+      children [
+        Shape {
+          appearance USE MAIL_LOCKER_DOOR_APP
+          geometry Box {
+            size 0.012 0.16 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.705 -1.16 0.1
+      children [
+        Shape {
+          appearance USE MAIL_LOCKER_DOOR_APP
+          geometry Box {
+            size 0.012 0.16 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.0 -1.72 0.08
+      children [
+        Shape {
+          appearance DEF SERVICE_COUNTER_APP PBRAppearance {
+            baseColor 0.36 0.34 0.3
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.72 0.18 0.16
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.22 -1.7 0.19
+      children [
+        Shape {
+          appearance DEF SCALE_APP PBRAppearance {
+            baseColor 0.08 0.09 0.1
+            roughness 0.8
+            metalness 0
+          }
+          geometry Box {
+            size 0.14 0.1 0.04
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.82 -1.69 0.19
+      children [
+        Shape {
+          appearance DEF TERMINAL_APP PBRAppearance {
+            baseColor 0.05 0.06 0.08
+            roughness 0.7
+            metalness 0
+          }
+          geometry Box {
+            size 0.12 0.035 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.45 -1.02 0.075
+      children [
+        Shape {
+          appearance DEF PACKAGE_APP PBRAppearance {
+            baseColor 0.66 0.48 0.27
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.18 0.14 0.15
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.23 -1.02 0.06
+      children [
+        Shape {
+          appearance DEF PACKAGE_ALT_APP PBRAppearance {
+            baseColor 0.78 0.58 0.34
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.16 0.18 0.12
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.25 -0.92 0.02
+      children [
+        Shape {
+          appearance DEF CHARGER_APP PBRAppearance {
+            baseColor 0.08 0.09 0.1
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.42 0.07 0.04
+          }
+        }
+      ]
+    }
+  ]
+}
+
+DEF FACULTY_OFFICE_FURNITURE Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation -1.16 -1.62 0.075
+      children [
+        Shape {
+          appearance DEF DESK_TOP_APP PBRAppearance {
+            baseColor 0.48 0.34 0.2
+            roughness 0.8
+            metalness 0
+          }
+          geometry Box {
+            size 0.52 0.24 0.08
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.88 -1.45 0.075
+      children [
+        Shape {
+          appearance USE DESK_TOP_APP
+          geometry Box {
+            size 0.2 0.38 0.08
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.16 -1.5 0.16
+      children [
+        Shape {
+          appearance DEF MONITOR_APP PBRAppearance {
+            baseColor 0.04 0.05 0.06
+            roughness 0.6
+            metalness 0
+          }
+          geometry Box {
+            size 0.18 0.025 0.12
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.16 -1.47 0.205
+      children [
+        Shape {
+          appearance DEF SCREEN_APP PBRAppearance {
+            baseColor 0.12 0.2 0.28
+            roughness 0.35
+            metalness 0
+          }
+          geometry Box {
+            size 0.15 0.01 0.08
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.16 -1.23 0
+      rotation 0 0 1 -1.5708
+      scale 0.18 0.18 0.18
+      children [
+        OfficeChair {
+          name "faculty_office_chair"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -0.68 -1.0 0
+      rotation 0 0 1 2.35
+      scale 0.17 0.17 0.17
+      children [
+        OfficeChair {
+          name "faculty_visitor_chair"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -0.63 -1.72 0.16
+      children [
+        Shape {
+          appearance DEF BOOKCASE_APP PBRAppearance {
+            baseColor 0.27 0.22 0.17
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.16 0.5 0.32
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.54 -1.82 0.21
+      children [
+        Shape {
+          appearance DEF BOOK_ROW_RED PBRAppearance {
+            baseColor 0.58 0.14 0.12
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.025 0.18 0.12
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.54 -1.62 0.21
+      children [
+        Shape {
+          appearance DEF BOOK_ROW_BLUE PBRAppearance {
+            baseColor 0.12 0.22 0.5
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.025 0.18 0.12
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.92 -0.6 0.16
+      children [
+        Shape {
+          appearance DEF OFFICE_MARKERBOARD_APP PBRAppearance {
+            baseColor 0.94 0.95 0.9
+            roughness 0.7
+            metalness 0
+          }
+          geometry Box {
+            size 0.42 0.012 0.16
+          }
+        }
+      ]
+    }
+  ]
+}
+
+DEF CLASSROOM_FURNITURE Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation -1.82 1.78 0.09
+      children [
+        Shape {
+          appearance DEF WHITEBOARD_APP PBRAppearance {
+            baseColor 0.94 0.95 0.9
+            roughness 0.7
+            metalness 0
+          }
+          geometry Box {
+            size 1.15 0.025 0.18
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.48 1.62 0.12
+      children [
+        Shape {
+          appearance DEF LECTERN_APP PBRAppearance {
+            baseColor 0.36 0.24 0.14
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.2 0.18 0.24
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.82 1.25 0.055
+      children [
+        Shape {
+          appearance DEF CLASSROOM_TABLE_APP PBRAppearance {
+            baseColor 0.64 0.48 0.28
+            roughness 0.85
+            metalness 0
+          }
+          geometry Cylinder {
+            radius 0.22
+            height 0.06
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.38 0.92 0.055
+      children [
+        Shape {
+          appearance USE CLASSROOM_TABLE_APP
+          geometry Cylinder {
+            radius 0.2
+            height 0.06
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.26 0.92 0.055
+      children [
+        Shape {
+          appearance USE CLASSROOM_TABLE_APP
+          geometry Cylinder {
+            radius 0.2
+            height 0.06
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.82 1.25 0.1
+      children [
+        Shape {
+          appearance DEF LAPTOP_APP PBRAppearance {
+            baseColor 0.07 0.08 0.09
+            roughness 0.7
+            metalness 0
+          }
+          geometry Box {
+            size 0.12 0.08 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -2.38 0.92 0.1
+      children [
+        Shape {
+          appearance USE LAPTOP_APP
+          geometry Box {
+            size 0.12 0.08 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.26 0.92 0.1
+      children [
+        Shape {
+          appearance USE LAPTOP_APP
+          geometry Box {
+            size 0.12 0.08 0.018
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -1.82 1.53 0
+      rotation 0 0 1 3.14159
+      scale 0.17 0.17 0.17
+      children [
+        OfficeChair {
+          name "classroom_chair_north"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -2.08 1.12 0
+      rotation 0 0 1 -0.8
+      scale 0.17 0.17 0.17
+      children [
+        OfficeChair {
+          name "classroom_chair_west"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -1.56 1.12 0
+      rotation 0 0 1 0.8
+      scale 0.17 0.17 0.17
+      children [
+        OfficeChair {
+          name "classroom_chair_east"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -2.38 0.66 0
+      rotation 0 0 1 1.5708
+      scale 0.17 0.17 0.17
+      children [
+        OfficeChair {
+          name "classroom_chair_southwest"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -1.26 0.66 0
+      rotation 0 0 1 1.5708
+      scale 0.17 0.17 0.17
+      children [
+        OfficeChair {
+          name "classroom_chair_southeast"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation -1.05 1.52 0.09
+      children [
+        Shape {
+          appearance DEF PINBOARD_APP PBRAppearance {
+            baseColor 0.18 0.3 0.28
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.35 0.025 0.18
+          }
+        }
+      ]
+    }
+  ]
+}
+
+DEF TEACHING_LAB_FURNITURE Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation 1.38 1.28 0.085
+      children [
+        Shape {
+          appearance DEF LAB_BENCH_APP PBRAppearance {
+            baseColor 0.78 0.8 0.76
+            roughness 0.75
+            metalness 0
+          }
+          geometry Box {
+            size 0.72 0.24 0.17
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.3 1.28 0.085
+      children [
+        Shape {
+          appearance USE LAB_BENCH_APP
+          geometry Box {
+            size 0.64 0.24 0.17
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.72 1.28 0.2
+      children [
+        Shape {
+          appearance DEF SINK_APP PBRAppearance {
+            baseColor 0.42 0.56 0.62
+            roughness 0.5
+            metalness 0
+          }
+          geometry Box {
+            size 0.14 0.1 0.025
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.46 1.64 0.17
+      children [
+        Shape {
+          appearance DEF FUME_HOOD_APP PBRAppearance {
+            baseColor 0.2 0.26 0.3
+            roughness 0.75
+            metalness 0
+          }
+          geometry Box {
+            size 0.42 0.2 0.34
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.46 1.54 0.2
+      children [
+        Shape {
+          appearance DEF FUME_SASH_APP PBRAppearance {
+            baseColor 0.7 0.86 0.88
+            transparency 0.28
+            roughness 0.35
+            metalness 0
+          }
+          geometry Box {
+            size 0.34 0.018 0.18
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.0 1.72 0.19
+      children [
+        Shape {
+          appearance DEF WALL_CABINET_APP PBRAppearance {
+            baseColor 0.62 0.66 0.64
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.42 0.12 0.28
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.18 0.72 0.1
+      children [
+        Shape {
+          appearance DEF SAFETY_STATION_APP PBRAppearance {
+            baseColor 0.05 0.5 0.18
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.12 0.08 0.2
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.5 0.8 0.06
+      children [
+        Shape {
+          appearance DEF LAB_COUNTER_APP PBRAppearance {
+            baseColor 0.16 0.24 0.3
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.5 0.12 0.12
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.5 0.8 0.15
+      children [
+        Shape {
+          appearance DEF MICROSCOPE_APP PBRAppearance {
+            baseColor 0.08 0.09 0.1
+            roughness 0.8
+            metalness 0
+          }
+          geometry Box {
+            size 0.08 0.06 0.08
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.32 0.92 0
+      rotation 0 0 1 1.5708
+      scale 0.18 0.18 0.18
+      children [
+        OfficeChair {
+          name "lab_stool_1"
+          enablePhysics FALSE
+        }
+      ]
+    }
+    Transform {
+      translation 2.12 0.92 0
+      rotation 0 0 1 1.5708
+      scale 0.18 0.18 0.18
+      children [
+        OfficeChair {
+          name "lab_stool_2"
+          enablePhysics FALSE
+        }
+      ]
+    }
+  ]
+}
+
+DEF STUDY_AND_SUPPORT_FURNITURE Transform {
+  translation 0 0 0
+  children [
+    Transform {
+      translation -0.08 1.42 0.05
+      children [
+        Shape {
+          appearance DEF LOUNGE_SEAT_APP PBRAppearance {
+            baseColor 0.28 0.38 0.42
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.46 0.18 0.1
+          }
+        }
+      ]
+    }
+    Transform {
+      translation -0.08 1.52 0.14
+      children [
+        Shape {
+          appearance DEF LOUNGE_BACK_APP PBRAppearance {
+            baseColor 0.2 0.28 0.32
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.46 0.06 0.18
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0.18 1.18 0.045
+      children [
+        Shape {
+          appearance DEF COFFEE_TABLE_APP PBRAppearance {
+            baseColor 0.52 0.38 0.22
+            roughness 0.9
+            metalness 0
+          }
+          geometry Box {
+            size 0.32 0.18 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0.02 0.72 0.1
+      children [
+        Shape {
+          appearance USE PINBOARD_APP
+          geometry Box {
+            size 0.34 0.025 0.2
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 0.72 -1.42 0.17
+      children [
+        Shape {
+          appearance DEF STORAGE_SHELF_APP PBRAppearance {
+            baseColor 0.45 0.46 0.43
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.18 0.74 0.34
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.04 -1.72 0.16
+      children [
+        Shape {
+          appearance DEF STORAGE_BIN_APP PBRAppearance {
+            baseColor 0.2 0.36 0.52
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.22 0.16 0.14
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.12 -1.1 0.2
+      children [
+        Shape {
+          appearance DEF LAB_FRIDGE_APP PBRAppearance {
+            baseColor 0.82 0.84 0.82
+            roughness 0.75
+            metalness 0
+          }
+          geometry Box {
+            size 0.22 0.18 0.4
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.18 -1.34 0.085
+      children [
+        Shape {
+          appearance USE LAB_BENCH_APP
+          geometry Box {
+            size 0.72 0.24 0.17
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.58 -1.7 0.17
+      children [
+        Shape {
+          appearance DEF EQUIPMENT_APP PBRAppearance {
+            baseColor 0.1 0.14 0.18
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.24 0.16 0.18
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 2.04 -1.34 0.18
+      children [
+        Shape {
+          appearance USE SCREEN_APP
+          geometry Box {
+            size 0.13 0.02 0.09
+          }
+        }
+      ]
+    }
+    Transform {
+      translation 1.72 -1.78 0.18
+      children [
+        Shape {
+          appearance USE FUME_HOOD_APP
+          geometry Box {
+            size 0.28 0.18 0.32
+          }
+        }
+      ]
+    }
+  ]
+}
+
+DEF ROOM_OBJECT_COLLIDERS Transform {
+  translation 0 0 0
+  children [
+    Solid {
+      translation -2.78 -1.32 0.17
+      children [
+        Shape {
+          appearance DEF COLLIDER_APP PBRAppearance {
+            baseColor 1 0 0
+            transparency 1
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.12 0.92 0.34
+          }
+        }
+      ]
+      name "mail_locker_collider"
+      boundingObject Box {
+        size 0.12 0.92 0.34
+      }
+    }
+    Solid {
+      translation -2.0 -1.72 0.08
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.72 0.18 0.16
+          }
+        }
+      ]
+      name "mail_counter_collider"
+      boundingObject Box {
+        size 0.72 0.18 0.16
+      }
+    }
+    Solid {
+      translation -2.34 -1.02 0.08
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.42 0.22 0.16
+          }
+        }
+      ]
+      name "mail_packages_collider"
+      boundingObject Box {
+        size 0.42 0.22 0.16
+      }
+    }
+    Solid {
+      translation -2.25 -0.92 0.02
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.42 0.07 0.04
+          }
+        }
+      ]
+      name "charger_collider"
+      boundingObject Box {
+        size 0.42 0.07 0.04
+      }
+    }
+    Solid {
+      translation -1.16 -1.62 0.075
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.52 0.24 0.08
+          }
+        }
+      ]
+      name "faculty_desk_main_collider"
+      boundingObject Box {
+        size 0.52 0.24 0.08
+      }
+    }
+    Solid {
+      translation -0.88 -1.45 0.075
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.2 0.38 0.08
+          }
+        }
+      ]
+      name "faculty_desk_return_collider"
+      boundingObject Box {
+        size 0.2 0.38 0.08
+      }
+    }
+    Solid {
+      translation -0.63 -1.72 0.16
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.16 0.5 0.32
+          }
+        }
+      ]
+      name "faculty_bookcase_collider"
+      boundingObject Box {
+        size 0.16 0.5 0.32
+      }
+    }
+    Solid {
+      translation -0.68 -1.0 0.08
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.2 0.2 0.16
+          }
+        }
+      ]
+      name "faculty_visitor_chair_collider"
+      boundingObject Box {
+        size 0.2 0.2 0.16
+      }
+    }
+    Solid {
+      translation -2.48 1.62 0.12
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.2 0.18 0.24
+          }
+        }
+      ]
+      name "classroom_lectern_collider"
+      boundingObject Box {
+        size 0.2 0.18 0.24
+      }
+    }
+    Solid {
+      translation -1.82 1.25 0.055
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.46 0.46 0.06
+          }
+        }
+      ]
+      name "classroom_round_table_1_collider"
+      boundingObject Box {
+        size 0.46 0.46 0.06
+      }
+    }
+    Solid {
+      translation -2.38 0.92 0.055
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.42 0.42 0.06
+          }
+        }
+      ]
+      name "classroom_round_table_2_collider"
+      boundingObject Box {
+        size 0.42 0.42 0.06
+      }
+    }
+    Solid {
+      translation -1.26 0.92 0.055
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.42 0.42 0.06
+          }
+        }
+      ]
+      name "classroom_round_table_3_collider"
+      boundingObject Box {
+        size 0.42 0.42 0.06
+      }
+    }
+    Solid {
+      translation 1.38 1.28 0.085
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.72 0.24 0.17
+          }
+        }
+      ]
+      name "teaching_lab_bench_1_collider"
+      boundingObject Box {
+        size 0.72 0.24 0.17
+      }
+    }
+    Solid {
+      translation 2.3 1.28 0.085
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.64 0.24 0.17
+          }
+        }
+      ]
+      name "teaching_lab_bench_2_collider"
+      boundingObject Box {
+        size 0.64 0.24 0.17
+      }
+    }
+    Solid {
+      translation 2.46 1.64 0.17
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.42 0.2 0.34
+          }
+        }
+      ]
+      name "teaching_lab_fume_hood_collider"
+      boundingObject Box {
+        size 0.42 0.2 0.34
+      }
+    }
+    Solid {
+      translation 1.0 1.72 0.19
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.42 0.12 0.28
+          }
+        }
+      ]
+      name "teaching_lab_wall_cabinet_collider"
+      boundingObject Box {
+        size 0.42 0.12 0.28
+      }
+    }
+    Solid {
+      translation 2.5 0.8 0.06
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.5 0.12 0.12
+          }
+        }
+      ]
+      name "teaching_lab_counter_collider"
+      boundingObject Box {
+        size 0.5 0.12 0.12
+      }
+    }
+    Solid {
+      translation -0.08 1.42 0.08
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.5 0.22 0.16
+          }
+        }
+      ]
+      name "study_sofa_collider"
+      boundingObject Box {
+        size 0.5 0.22 0.16
+      }
+    }
+    Solid {
+      translation 0.18 1.18 0.045
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.32 0.18 0.09
+          }
+        }
+      ]
+      name "study_table_collider"
+      boundingObject Box {
+        size 0.32 0.18 0.09
+      }
+    }
+    Solid {
+      translation 0.72 -1.42 0.17
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.18 0.74 0.34
+          }
+        }
+      ]
+      name "prep_shelf_collider"
+      boundingObject Box {
+        size 0.18 0.74 0.34
+      }
+    }
+    Solid {
+      translation 1.12 -1.1 0.2
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.22 0.18 0.4
+          }
+        }
+      ]
+      name "prep_fridge_collider"
+      boundingObject Box {
+        size 0.22 0.18 0.4
+      }
+    }
+    Solid {
+      translation 2.18 -1.34 0.085
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.72 0.24 0.17
+          }
+        }
+      ]
+      name "research_bench_collider"
+      boundingObject Box {
+        size 0.72 0.24 0.17
+      }
+    }
+    Solid {
+      translation 1.72 -1.78 0.18
+      children [
+        Shape {
+          appearance USE COLLIDER_APP
+          geometry Box {
+            size 0.28 0.18 0.32
+          }
+        }
+      ]
+      name "research_fume_hood_collider"
+      boundingObject Box {
+        size 0.28 0.18 0.32
+      }
+    }
+  ]
 }

@@ -6,6 +6,7 @@ class MissionMetrics:
         self.obstacle_avoidance_count = 0
         self.visited_waypoints = []
         self.delivered_to = None
+        self.deliveries = []
         self.path_length = 0.0
         self.planned_distance = 0.0
         self.failure_reason = None
@@ -21,8 +22,13 @@ class MissionMetrics:
     def record_waypoint(self, waypoint_name):
         self.visited_waypoints.append((waypoint_name, self.robot.getTime()))
 
-    def record_delivery(self, waypoint_name):
-        self.delivered_to = waypoint_name
+    def record_delivery(self, pickup, dropoff=None):
+        if dropoff is None:
+            dropoff = pickup
+            pickup = None
+
+        self.delivered_to = dropoff
+        self.deliveries.append((pickup, dropoff, self.robot.getTime()))
 
     def finish_mission(
         self,
@@ -49,7 +55,18 @@ class MissionMetrics:
 
         print("\n===== Mission Metrics =====")
         print(f"Success: {self.success}")
-        print(f"Delivered to: {self.delivered_to}")
+        if self.deliveries:
+            delivered_jobs = []
+
+            for pickup, dropoff, _ in self.deliveries:
+                if pickup is None:
+                    delivered_jobs.append(dropoff)
+                else:
+                    delivered_jobs.append(f"{pickup}->{dropoff}")
+
+            print(f"Delivered jobs: {', '.join(delivered_jobs)}")
+        else:
+            print(f"Delivered to: {self.delivered_to}")
         print(f"Mission time: {mission_time:.2f} seconds")
         print(f"Obstacle avoidance actions: {self.obstacle_avoidance_count}")
         print(f"Estimated path length: {self.path_length:.2f} meters")
